@@ -23,6 +23,15 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | null>(null);
 
+const syncIdCache = (prefix: string, items: { id: string }[]) => {
+  sessionStorage.setItem(`ids_${prefix}`, JSON.stringify(items.map(x => x.id)));
+};
+
+const syncGrievousCache = (reports: MLRReport[]) => {
+  const ids = reports.flatMap(r => (r.grievousEntries || []).map((g: any) => g.id));
+  sessionStorage.setItem("ids_GE", JSON.stringify(ids));
+};
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(() => {
     const stored = localStorage.getItem("user");
@@ -70,6 +79,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         setMlrReports(mlrData || []);
         setLabRequests(labData || []);
         setPmrForms(pmrData || []);
+
+        syncIdCache("USR", usersData || []);
+        syncIdCache("P", patientsData || []);
+        syncIdCache("MLEF", mlefData || []);
+        syncIdCache("MLR", mlrData || []);
+        syncIdCache("LAB", labData || []);
+        syncIdCache("PMR", pmrData || []);
+        syncGrievousCache(mlrData || []);
       } catch (err) {
         console.error("Error fetching application data from backend:", err);
       }
@@ -81,7 +98,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const addUser = async (u: AppUser) => {
     try {
       const saved = await api.auth.register(u);
-      setUsers(prev => [...prev, saved]);
+      setUsers(prev => {
+        const next = [...prev, saved];
+        syncIdCache("USR", next);
+        return next;
+      });
     } catch (err) {
       console.error("Failed to add user:", err);
     }
@@ -90,7 +111,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const addPatient = async (p: Patient) => {
     try {
       const saved = await api.patients.create(p);
-      setPatients(prev => [...prev, saved]);
+      setPatients(prev => {
+        const next = [...prev, saved];
+        syncIdCache("P", next);
+        return next;
+      });
     } catch (err) {
       console.error("Failed to add patient:", err);
     }
@@ -99,7 +124,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const saveMlefForm = async (f: MLEFForm) => {
     try {
       const saved = await api.mlef.save(f);
-      setMlefForms(prev => prev.some(x => x.id === saved.id) ? prev.map(x => x.id === saved.id ? saved : x) : [...prev, saved]);
+      setMlefForms(prev => {
+        const next = prev.some(x => x.id === saved.id) ? prev.map(x => x.id === saved.id ? saved : x) : [...prev, saved];
+        syncIdCache("MLEF", next);
+        return next;
+      });
     } catch (err) {
       console.error("Failed to save MLEF form:", err);
     }
@@ -108,7 +137,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const saveMlrReport = async (r: MLRReport) => {
     try {
       const saved = await api.mlr.save(r);
-      setMlrReports(prev => prev.some(x => x.id === saved.id) ? prev.map(x => x.id === saved.id ? saved : x) : [...prev, saved]);
+      setMlrReports(prev => {
+        const next = prev.some(x => x.id === saved.id) ? prev.map(x => x.id === saved.id ? saved : x) : [...prev, saved];
+        syncIdCache("MLR", next);
+        syncGrievousCache(next);
+        return next;
+      });
     } catch (err) {
       console.error("Failed to save MLR report:", err);
     }
@@ -117,7 +151,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const addLabRequest = async (r: LabRequest) => {
     try {
       const saved = await api.lab.create(r);
-      setLabRequests(prev => [...prev, saved]);
+      setLabRequests(prev => {
+        const next = [...prev, saved];
+        syncIdCache("LAB", next);
+        return next;
+      });
     } catch (err) {
       console.error("Failed to add lab request:", err);
     }
@@ -126,7 +164,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const updateLabRequest = async (id: string, data: Partial<LabRequest>) => {
     try {
       const saved = await api.lab.update(id, data);
-      setLabRequests(prev => prev.map(r => r.id === id ? saved : r));
+      setLabRequests(prev => {
+        const next = prev.map(r => r.id === id ? saved : r);
+        syncIdCache("LAB", next);
+        return next;
+      });
     } catch (err) {
       console.error("Failed to update lab request:", err);
     }
@@ -139,7 +181,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const updated = { ...form, labRequestId };
         try {
           const saved = await api.mlef.save(updated);
-          setMlefForms(prev => prev.map(f => f.id === formId ? saved : f));
+          setMlefForms(prev => {
+            const next = prev.map(f => f.id === formId ? saved : f);
+            syncIdCache("MLEF", next);
+            return next;
+          });
         } catch (err) {
           console.error("Failed to link lab request to MLEF form:", err);
         }
@@ -150,7 +196,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const updated = { ...report, labRequestId };
         try {
           const saved = await api.mlr.save(updated);
-          setMlrReports(prev => prev.map(r => r.id === formId ? saved : r));
+          setMlrReports(prev => {
+            const next = prev.map(r => r.id === formId ? saved : r);
+            syncIdCache("MLR", next);
+            return next;
+          });
         } catch (err) {
           console.error("Failed to link lab request to MLR report:", err);
         }
@@ -161,7 +211,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         const updated = { ...form, labRequestId };
         try {
           const saved = await api.pmr.save(updated);
-          setPmrForms(prev => prev.map(f => f.id === formId ? saved : f));
+          setPmrForms(prev => {
+            const next = prev.map(f => f.id === formId ? saved : f);
+            syncIdCache("PMR", next);
+            return next;
+          });
         } catch (err) {
           console.error("Failed to link lab request to PMR form:", err);
         }
@@ -172,7 +226,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const savePmrForm = async (f: PMRForm) => {
     try {
       const saved = await api.pmr.save(f);
-      setPmrForms(prev => prev.some(x => x.id === saved.id) ? prev.map(x => x.id === saved.id ? saved : x) : [...prev, saved]);
+      setPmrForms(prev => {
+        const next = prev.some(x => x.id === saved.id) ? prev.map(x => x.id === saved.id ? saved : x) : [...prev, saved];
+        syncIdCache("PMR", next);
+        return next;
+      });
     } catch (err) {
       console.error("Failed to save PMR form:", err);
     }
