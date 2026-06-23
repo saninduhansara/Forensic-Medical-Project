@@ -7,6 +7,7 @@ export const USERS: AppUser[] = [
   { id: "a2", name: "Kamani Dissanayake",      role: "admin",  designation: "Police Officer",         username: "kamani.d",    password: "Admin@456"  },
   { id: "l1", name: "Chaminda Wickramasinghe", role: "lab",    designation: "Lab Technician",         username: "chaminda.w",  password: "Lab@123"    },
   { id: "l2", name: "Dilini Jayawardena",      role: "lab",    designation: "Senior Lab Technician",  username: "dilini.j",    password: "Lab@456"    },
+  { id: "j1", name: "Dr. Ruwan Perera",        role: "jmo",    designation: "Judicial Medical Officer", username: "dr.ruwan",   password: "Jmo@123"    },
 ];
 
 export const INIT_PATIENTS: Patient[] = [

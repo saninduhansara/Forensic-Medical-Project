@@ -6,7 +6,7 @@ import { FormList } from "@/components/forms/FormList";
 export function MLRListPage() {
   const { currentUser, patients, mlrReports } = useApp();
   const navigate = useNavigate();
-  const isDoctor = currentUser?.role === "doctor";
+  const isJmo = currentUser?.role === "jmo";
 
   return (
     <FormList
@@ -15,7 +15,7 @@ export function MLRListPage() {
       items={mlrReports}
       patients={patients}
       onOpen={id => navigate(`/mlr/${id}`)}
-      onNew={isDoctor ? () => navigate("/mlr/new") : undefined}
+      onNew={isJmo ? () => navigate("/mlr/new") : undefined}
       newLabel="New MLR Report"
     />
   );

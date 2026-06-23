@@ -14,11 +14,13 @@ import type { AppUser, Role } from "@/types";
 const ROLE_OPTIONS = [
   { value: "doctor", label: "Doctor / Medical Officer" },
   { value: "lab",    label: "Lab Technician" },
+  { value: "jmo",    label: "Judicial Medical Officer" },
 ];
 
 const DESIGNATION_PRESETS: Record<string, string[]> = {
   doctor: ["Medical Officer", "Senior Medical Officer", "Consultant", "Registrar", "House Officer"],
   lab:    ["Lab Technician", "Senior Lab Technician", "Chief Lab Technician"],
+  jmo:    ["Judicial Medical Officer", "Additional JMO", "Senior JMO", "Consultant JMO"],
 };
 
 export function StaffRegisterPage() {

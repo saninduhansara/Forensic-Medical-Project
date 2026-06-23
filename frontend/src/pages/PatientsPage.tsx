@@ -20,13 +20,14 @@ export function PatientsPage() {
 
   const isAdmin  = currentUser?.role === "admin";
   const isDoctor = currentUser?.role === "doctor";
+  const isJmo    = currentUser?.role === "jmo";
 
   return (
     <div>
       <PageHeader
         title="Patient Records"
         subtitle="All registered patients and their associated forms"
-        actions={(isAdmin || isDoctor)
+        actions={(isAdmin || isDoctor || isJmo)
           ? <Btn variant="primary" icon={<Plus size={14} />} onClick={() => navigate("/patients/register")}>Register Patient</Btn>
           : undefined
         }
@@ -75,13 +76,13 @@ export function PatientsPage() {
                       {f.mlefNo || f.id} <Badge status={f.status} />
                     </Btn>
                   ))}
-                  {(isAdmin || isDoctor) && (
+                  {(isAdmin || isDoctor || isJmo) && (
                     <Btn variant="ghost" size="sm" icon={<Plus size={12} />}
                       onClick={() => navigate(`/mlef/new?patientId=${p.id}`)}>
                       New MLEF
                     </Btn>
                   )}
-                  {pMlef.length === 0 && !isAdmin && !isDoctor && (
+                  {pMlef.length === 0 && !isAdmin && !isDoctor && !isJmo && (
                     <span className="text-xs text-slate-400 italic">None</span>
                   )}
                 </div>
@@ -95,7 +96,7 @@ export function PatientsPage() {
                       {r.id} <Badge status={r.status} />
                     </Btn>
                   ))}
-                  {isDoctor && (
+                  {isJmo && (
                     <Btn variant="ghost" size="sm" icon={<Plus size={12} />}
                       onClick={() => navigate(`/mlr/new?patientId=${p.id}`)}>
                       New MLR
@@ -113,7 +114,7 @@ export function PatientsPage() {
                       {f.id} <Badge status={f.status} />
                     </Btn>
                   ))}
-                  {isDoctor && (
+                  {(isDoctor || isJmo) && (
                     <Btn variant="ghost" size="sm" icon={<Plus size={12} />}
                       onClick={() => navigate(`/autopsy/new?patientId=${p.id}`)}>
                       New Autopsy

@@ -38,16 +38,30 @@ const LAB_NAV: NavItem[] = [
   { to: "/lab-requests", label: "Lab Requests", icon: <FlaskConical size={16} /> },
 ];
 
+const JMO_NAV: NavItem[] = [
+  { to: "/dashboard",           label: "Dashboard",        icon: <Activity size={16} /> },
+  { to: "/patients",            label: "Patients",         icon: <Users size={16} /> },
+  { to: "/patients/register",   label: "Register Patient", icon: <Plus size={16} /> },
+  { to: "/mlef",                label: "MLEF Forms",       icon: <ClipboardList size={16} /> },
+  { to: "/mlr",                 label: "MLR Reports",      icon: <FileText size={16} /> },
+  { to: "/autopsy",             label: "Autopsy Forms",    icon: <Clipboard size={16} /> },
+  { to: "/lab-requests",        label: "Lab Requests",     icon: <FlaskConical size={16} /> },
+  { to: "/reports/daily",       label: "Daily Case Report",icon: <Calendar size={16} /> },
+  { to: "/reports/monthly",     label: "Monthly Statistics", icon: <BarChart2 size={16} /> },
+];
+
 const NAV_BY_ROLE: Record<Role, NavItem[]> = {
   doctor: DOCTOR_NAV,
   admin:  ADMIN_NAV,
   lab:    LAB_NAV,
+  jmo:    JMO_NAV,
 };
 
 const ROLE_COLORS: Record<Role, string> = {
   doctor: "bg-blue-500",
   admin:  "bg-slate-500",
   lab:    "bg-emerald-500",
+  jmo:    "bg-purple-500",
 };
 
 interface SidebarProps {

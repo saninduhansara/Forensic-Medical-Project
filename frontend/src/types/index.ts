@@ -1,4 +1,4 @@
-export type Role = "doctor" | "admin" | "lab";
+export type Role = "doctor" | "admin" | "lab" | "jmo";
 export type Urgency = "routine" | "urgent" | "stat";
 export type MlefStatus = "draft" | "complete";
 export type FormStatus = "draft" | "submitted";

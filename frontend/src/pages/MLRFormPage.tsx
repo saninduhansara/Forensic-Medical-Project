@@ -24,7 +24,7 @@ export function MLRFormPage() {
   const [labCtx, setLabCtx] = useState<{ patientId: string; formId: string; formType: string } | null>(null);
 
   if (!currentUser) return null;
-  const readOnly = currentUser.role === "admin";
+  const readOnly = currentUser.role === "admin" || currentUser.role === "doctor";
 
   const handleSaveLabRequest = (req: LabRequest) => {
     addLabRequest(req);

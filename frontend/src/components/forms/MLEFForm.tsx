@@ -62,7 +62,7 @@ export function MLEFForm({ form: initForm, patient: initPatient, allPatients, us
   };
 
   const isAdminEditA = userRole === "admin";
-  const isDoctorEditB = userRole === "doctor";
+  const isDoctorEditB = userRole === "doctor" || userRole === "jmo";
   const hasPartA = !!f.partAFilledAt;
   const hasPartB = !!f.partBFilledAt;
 

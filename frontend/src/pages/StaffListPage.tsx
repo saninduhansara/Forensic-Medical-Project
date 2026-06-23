@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Plus, Stethoscope, FlaskConical, Shield } from "lucide-react";
+import { Plus, Stethoscope, FlaskConical, Shield, Scale } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Btn } from "@/components/ui/Btn";
@@ -10,18 +10,21 @@ const ROLE_LABELS: Record<Role, string> = {
   doctor: "Doctor",
   admin:  "Admin / Police",
   lab:    "Lab Technician",
+  jmo:    "Judicial Medical Officer",
 };
 
 const ROLE_COLORS: Record<Role, string> = {
   doctor: "bg-blue-100 text-blue-700",
   admin:  "bg-slate-100 text-slate-700",
   lab:    "bg-emerald-100 text-emerald-700",
+  jmo:    "bg-purple-100 text-purple-700",
 };
 
 const ROLE_ICONS: Record<Role, React.ReactNode> = {
   doctor: <Stethoscope size={14} />,
   admin:  <Shield size={14} />,
   lab:    <FlaskConical size={14} />,
+  jmo:    <Scale size={14} />,
 };
 
 export function StaffListPage() {
@@ -29,6 +32,7 @@ export function StaffListPage() {
   const navigate = useNavigate();
 
   const doctors  = users.filter(u => u.role === "doctor");
+  const jmos     = users.filter(u => u.role === "jmo");
   const labTechs = users.filter(u => u.role === "lab");
   const admins   = users.filter(u => u.role === "admin");
 
@@ -47,6 +51,7 @@ export function StaffListPage() {
                 <div className="flex items-center gap-3">
                   <div className={cls("w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm",
                     u.role === "doctor" ? "bg-blue-100 text-blue-600"
+                    : u.role === "jmo"  ? "bg-purple-100 text-purple-600"
                     : u.role === "lab"  ? "bg-emerald-100 text-emerald-600"
                     : "bg-slate-100 text-slate-600")}>
                     {u.name.charAt(0)}
@@ -82,6 +87,7 @@ export function StaffListPage() {
         }
       />
       <Section title="Doctors / Medical Officers" items={doctors} />
+      <Section title="Judicial Medical Officers (JMO)" items={jmos} />
       <Section title="Lab Technicians" items={labTechs} />
       <Section title="Admin / Police Staff" items={admins} />
     </div>

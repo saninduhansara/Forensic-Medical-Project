@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Activity, AlertCircle, User, Shield, Stethoscope, FlaskConical } from "lucide-react";
+import { Activity, AlertCircle, User, Shield, Stethoscope, FlaskConical, Scale } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { cls } from "@/lib/utils";
 import type { Role } from "@/types";
@@ -9,12 +9,14 @@ const ROLE_ICONS: Record<Role, React.ReactNode> = {
   doctor: <Stethoscope size={14} />,
   admin:  <Shield size={14} />,
   lab:    <FlaskConical size={14} />,
+  jmo:    <Scale size={14} />,
 };
 
 const ROLE_COLORS: Record<Role, string> = {
   doctor: "bg-blue-100 text-blue-700",
   admin:  "bg-slate-100 text-slate-700",
   lab:    "bg-emerald-100 text-emerald-700",
+  jmo:    "bg-purple-100 text-purple-700",
 };
 
 export function LoginPage() {
