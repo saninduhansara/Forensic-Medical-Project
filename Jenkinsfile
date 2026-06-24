@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Forces Docker to use a clean, consistent name instead of the random Jenkins workspace name
-        COMPOSE_PROJECT_NAME = 'Forensic-Medical-Project'
+        COMPOSE_PROJECT_NAME = 'forensic-medical-project'
     }
 
     stages {
