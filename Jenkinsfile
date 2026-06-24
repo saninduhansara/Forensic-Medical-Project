@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('backend') {
                     // Installs dependencies using the Node.js we installed on your EC2
-                    sh 'npm ci'
+                    sh 'npm i'
                     
                     // Runs the newly added Jest + Supertest test suite
                     sh 'npm test'
@@ -35,7 +35,7 @@ pipeline {
         stage('Frontend Build & Test') {
             steps {
                 dir('frontend') {
-                    sh 'npm ci'
+                    sh 'npm i'
                     
                     // Runs the newly added Vitest + React Testing Library suite
                     sh 'npm test'
